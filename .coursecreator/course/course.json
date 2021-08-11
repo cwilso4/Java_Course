@@ -1,0 +1,53 @@
+{
+  "summary" : "This is an introductory Java course.\n- The course will be most beneficial for beginner-level Java learners.\n- The course covers core Java features.\n- It contains hands-on examples of Java code implementation and exercises to practice new skills.\n- The course is based on the author's personal experience in Java development.",
+  "title" : "Java Course",
+  "programming_language" : "JAVA",
+  "language" : "en",
+  "course_type" : "PyCharm",
+  "items" : [
+    {
+      "title" : "Unit 1 - Simple Output",
+      "items" : [
+        {
+          "title" : "OutputStuff",
+          "task_list" : [
+            {
+              "name" : "HelloWorld",
+              "files" : {
+                "test/output.txt" : {
+                  "name" : "test/output.txt",
+                  "placeholders" : [ ],
+                  "is_visible" : false,
+                  "text" : "Hello World!\n"
+                },
+                "src/HelloWorld.java" : {
+                  "name" : "src/HelloWorld.java",
+                  "placeholders" : [ ],
+                  "is_visible" : true,
+                  "text" : "public class HelloWorld {\n   public static void main(String[] args) {\n      // Write your solution here\n      System.out.println(\"Hello World!\");\n   }\n}"
+                }
+              },
+              "description_text" : "<html>\n\n<h2>Write a program that outputs Hello World! to the console.</h2>\n</html>",
+              "description_format" : "HTML",
+              "feedback_link" : {
+                "link_type" : "STEPIK"
+              },
+              "task_type" : "output"
+            }
+          ],
+          "type" : "lesson"
+        }
+      ],
+      "type" : "section"
+    }
+  ],
+  "additional_files" : [
+    {
+      "name" : "build.gradle",
+      "placeholders" : [ ],
+      "is_visible" : true,
+      "text" : "buildscript {\n    repositories {\n        mavenCentral()\n    }\n}\n\ndef printOutput(def output) {\n    return tasks.create(\"printOutput\") {\n        println \"#educational_plugin_checker_version 1\"\n        def separator = System.lineSeparator()\n        def lines = output.toString().split(\"(?<=${separator})|(?=${separator})\")\n        for (line in lines) {\n            println \"#educational_plugin\" + line\n        }\n    }\n}\n\nsubprojects {\n    apply plugin: 'application'\n    apply plugin: 'java'\n\n    sourceCompatibility = 1.8\n\n    repositories {\n        mavenCentral()\n    }\n\n    dependencies {\n        testImplementation group: 'junit', name: 'junit', version: '4.12'\n    }\n\n    sourceSets {\n        main {\n            java.srcDir 'src'\n        }\n        test {\n            java.srcDir 'test'\n        }\n    }\n\n    mainClassName = project.hasProperty(\"mainClass\") ? project.getProperty(\"mainClass\") : \"\"\n\n    if (project.hasProperty(\"educationalRun\") && \"true\".equalsIgnoreCase(project.getProperty(\"educationalRun\"))) {\n        def runOutput = new ByteArrayOutputStream()\n        tasks.run.setStandardOutput(runOutput)\n        tasks.run.doLast { printOutput(runOutput) }\n    }\n}\n\nproject(':util') {\n    dependencies {\n        implementation group: 'junit', name: 'junit', version: '4.12'\n    }\n}\n\nconfigure(subprojects.findAll { it.name != 'util' }) {\n    dependencies {\n        implementation project(':util').sourceSets.main.output\n        testImplementation project(':util').sourceSets.test.output\n    }\n}\n"
+    }
+  ],
+  "version" : 11
+}
